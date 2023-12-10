@@ -37,6 +37,12 @@ export default class RibbonMenu {
 
     this.elem = createElement(templateAll);
 
+    this.#onRibbonSelect();
+
+    return this.elem;
+  }
+
+  #onRibbonSelect = () => {
     this.elem.addEventListener("click", (e) => {
       if (e.target.closest(".ribbon__item")) {
         e.preventDefault;
@@ -56,44 +62,48 @@ export default class RibbonMenu {
         this.elem.dispatchEvent(event);
       }
     });
+  };
 
-    return this.elem;
-  }
+  #onRibbonScrollClick = (e) => {
+    if (e.target == e.currentTarget || !e.target.closest(".ribbon__arrow"))
+      return;
+    let ribbonInner = this.elem.querySelector(".ribbon__inner");
+    if (e.target.closest(".ribbon__arrow_right")) {
+      ribbonInner.scrollBy(350, 0);
+    }
+    if (e.target.closest(".ribbon__arrow_left")) {
+      ribbonInner.scrollBy(-350, 0);
+    }
+  };
 
-  #initScrollRibbonMenu = () => {
+  #onRibbonScroll = (e) => {
     let arrowRight = this.elem.querySelector(".ribbon__arrow_right");
     let arrowLeft = this.elem.querySelector(".ribbon__arrow_left");
     let ribbonInner = this.elem.querySelector(".ribbon__inner");
 
-    let onRibbonScrollClick = (e) => {
-      if (e.target == e.currentTarget || !e.target.closest(".ribbon__arrow"))
-        return;
+    let scrollWidth = ribbonInner.scrollWidth;
+    let scrollLeft = ribbonInner.scrollLeft;
+    let clientWidth = ribbonInner.clientWidth;
 
-      if (e.target.closest(".ribbon__arrow_right")) {
-        ribbonInner.scrollBy(350, 0);
-      }
-      if (e.target.closest(".ribbon__arrow_left")) {
-        ribbonInner.scrollBy(-350, 0);
-      }
-    };
+    let scrollRight = scrollWidth - scrollLeft - clientWidth;
 
-    let onRibbonScroll = (e) => {
-      let scrollWidth = ribbonInner.scrollWidth;
-      let scrollLeft = ribbonInner.scrollLeft;
-      let clientWidth = ribbonInner.clientWidth;
+    if (scrollRight == 0) {
+      arrowRight.classList.remove("ribbon__arrow_visible");
+    } else arrowRight.classList.add("ribbon__arrow_visible");
 
-      let scrollRight = scrollWidth - scrollLeft - clientWidth;
+    if (scrollLeft >= 0 && scrollLeft < 1) {
+      arrowLeft.classList.remove("ribbon__arrow_visible");
+    } else arrowLeft.classList.add("ribbon__arrow_visible");
+  };
 
-      if (scrollRight == 0) {
-        arrowRight.classList.remove("ribbon__arrow_visible");
-      } else arrowRight.classList.add("ribbon__arrow_visible");
+  #initScrollRibbonMenu = () => {
+    let ribbonInner = this.elem.querySelector(".ribbon__inner");
 
-      if (scrollLeft >= 0 && scrollLeft < 1) {
-        arrowLeft.classList.remove("ribbon__arrow_visible");
-      } else arrowLeft.classList.add("ribbon__arrow_visible");
-    };
+    this.#onRibbonScrollClick;
 
-    this.elem.addEventListener("click", onRibbonScrollClick);
-    ribbonInner.addEventListener("scroll", onRibbonScroll);
+    this.#onRibbonScroll;
+
+    this.elem.addEventListener("click", this.#onRibbonScrollClick);
+    ribbonInner.addEventListener("scroll", this.#onRibbonScroll);
   };
 }

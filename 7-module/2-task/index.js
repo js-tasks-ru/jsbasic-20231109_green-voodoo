@@ -60,19 +60,19 @@ export default class Modal {
     this.elem.addEventListener("click", (e) => {
       if (e.target.closest(".modal__close")) {
         this.close();
-        document.removeEventListener("keydown", keydownListener);
+        document.removeEventListener("keydown", this.#onKeyDownListener);
       }
     });
 
-    let keydownListener = (e) => {
-      if (e.code === "Escape") {
-        this.close();
-        document.removeEventListener("keydown", keydownListener);
-      }
-    };
-
-    document.addEventListener("keydown", keydownListener);
+    document.addEventListener("keydown", this.#onKeyDownListener);
 
     return this.elem;
   }
+
+  #onKeyDownListener = (e) => {
+    if (e.code === "Escape") {
+      this.close();
+      document.removeEventListener("keydown", this.#onKeyDownListener);
+    }
+  };
 }

@@ -24,14 +24,6 @@ export default class StepSlider {
 
     let lengthStep = Math.round(this.elem.offsetWidth / (this.steps - 1));
 
-    /*function getNewPosition(clickPositionX, lengthStep) {
-      let positionLeft = Math.floor(clickPositionX / lengthStep);
-      return clickPositionX % lengthStep < lengthStep / 2
-        ? positionLeft
-        : positionLeft + 1;
-    }
-
-    let newPosition = getNewPosition(clickPositionX, lengthStep);*/
     let newPosition = Math.round(clickPositionX / lengthStep);
 
     let newPercents = (100 / (this.steps - 1)) * newPosition;
