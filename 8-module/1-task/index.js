@@ -51,6 +51,7 @@ export default class CartIcon {
       this.elem.style.top = "";
       this.elem.style.right = "";
       this.elem.style.left = "";
+      this.elem.style.zIndex = "";
       return;
     }
 
@@ -79,11 +80,13 @@ export default class CartIcon {
       this.elem.style.top = "50px";
       this.elem.style.right = "10px";
       this.elem.style.left = leftPosition;
+      this.elem.style.zIndex = 100;
     } else {
       this.elem.style.position = "";
       this.elem.style.top = "";
       this.elem.style.right = "";
       this.elem.style.left = "";
+      this.elem.style.zIndex = "";
     }
   }
 }

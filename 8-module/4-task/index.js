@@ -115,10 +115,10 @@ export default class Cart {
   renderModal() {
     // ...ваш код
 
-    let modal = new Modal();
-    modal.setTitle("Your order");
+    this.modal = new Modal();
+    this.modal.setTitle("Your order");
 
-    let elemModalBody = modal.elem.querySelector(".modal__body");
+    let elemModalBody = this.modal.elem.querySelector(".modal__body");
     elemModalBody.innerHTML = "";
 
     for (let i = 0; i < this.cartItems.length; i++) {
@@ -128,14 +128,14 @@ export default class Cart {
     }
     elemModalBody.appendChild(this.renderOrderForm());
 
-    modal.elem.addEventListener("click", this.#onButtonClick);
+    this.modal.elem.addEventListener("click", this.#onButtonClick);
 
-    let formCart = modal.elem.querySelector(".cart-form");
+    let formCart = this.modal.elem.querySelector(".cart-form");
     formCart.addEventListener("submit", this.onSubmit);
 
-    modal.open();
+    this.modal.open();
 
-    return modal;
+    return this.modal;
   }
 
   #onButtonClick = (event) => {
@@ -152,10 +152,9 @@ export default class Cart {
       this.updateProductCount(cart.dataset.productId, -1);
 
       if (this.getTotalCount() === 0) {
-        let modal = document.querySelector(".modal");
-        if (modal) {
-          modal.classList.remove(`is-modal-open`);
-          modal.remove();
+        if (this.modal) {
+          this.modal.close();
+          this.cartIcon.update(this);
         }
         return;
       }
@@ -200,8 +199,6 @@ export default class Cart {
     let form = document.querySelector(".cart-form");
 
     const formData = new FormData(form);
-    console.log("Начинаем делать запрос1");
-    console.log(formData);
 
     const responsePromise = fetch("https://httpbin.org/post", {
       method: "POST",
@@ -220,6 +217,7 @@ export default class Cart {
            <img src="/assets/images/delivery.gif">
            </p>
           </div>`;
+        this.cartIcon.update(this);
       })
       .catch(() => {
         console.log("error");

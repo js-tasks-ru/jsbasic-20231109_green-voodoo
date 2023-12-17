@@ -15,7 +15,7 @@ export default class ProductGrid {
       this.filters[key] = filters[key];
     }
 
-    this.elem.firstElementChild.innerHTML = this.#addInnerHTML();
+    this.#addProductCards();
   }
 
   #isShow(product, filters) {
@@ -42,27 +42,25 @@ export default class ProductGrid {
     return true;
   }
 
-  #addInnerHTML() {
-    let template = "";
-    let productCard;
+  #addProductCards() {
+    let grid = this.elem.querySelector(".products-grid__inner");
+
     for (let i = 0; i < this.products.length; i++) {
       if (this.#isShow(this.products[i], this.filters)) {
-        productCard = new ProductCard(this.products[i]);
-        template +=
-          `<div class="card">` + productCard.elem.innerHTML + `</div>`;
+        grid.appendChild(new ProductCard(this.products[i]).elem);
       }
     }
-    return template;
   }
 
   #render() {
-    let templateAll = `<div class="products-grid">
+    let template = `<div class="products-grid">
     <div class="products-grid__inner">
-    ${this.#addInnerHTML()}
     </div>
     </div>`;
 
-    this.elem = createElement(templateAll);
+    this.elem = createElement(template);
+
+    this.#addProductCards();
 
     return this.elem;
   }
